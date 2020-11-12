@@ -4,6 +4,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+
 import javax.swing.SwingConstants;
 
 import org.jfree.chart.ChartFactory;
@@ -23,6 +27,7 @@ import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Paint;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,33 +60,51 @@ public class ProjectViewTeacher extends JFrame {
 	private JTextField txtfTeamLeader;
 	private JTextField txtfCourse;
 	private JLabel lblCourse;
+	private JPanel panelMain;
 	
 	private ArrayList<String> studStarted,studProgress,studCompleted;
 
-	public ProjectViewTeacher(int projid,String usertype) {
+	public ProjectViewTeacher(int projid,String usertype,String section) {
 		getContentPane().setLayout(null);
+		
+		panelMain = new JPanel() {
+			protected void paintComponent(Graphics g) {
+				if (g instanceof Graphics2D) {
+					Paint p = new GradientPaint(0, 0, new Color(255, 255, 77), getWidth(), getHeight(),
+							new Color(204, 0, 68), true);
+					Graphics2D g2d = (Graphics2D) g;
+					g2d.setPaint(p);
+					g2d.fillRect(0, 0, getWidth(), getHeight());
+				} else {
+					super.paintComponent(g);
+				}
+			}
+		};
+		
+		panelMain.setLayout(null);
+		setContentPane(panelMain);
 		
 		lblProjectName = new JLabel();
 		lblProjectName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblProjectName.setFont(new Font("Tahoma", Font.BOLD, 18));
 		lblProjectName.setBounds(316, 40, 439, 50);
-		getContentPane().add(lblProjectName);
+		panelMain.add(lblProjectName);
 		
 		lblStartDate = new JLabel("Start Date");
 		lblStartDate.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblStartDate.setBounds(35, 139, 106, 24);
-		getContentPane().add(lblStartDate);
+		panelMain.add(lblStartDate);
 		
 		txtfStartDate = new JTextField();
 		txtfStartDate.setEditable(false);
 		txtfStartDate.setBounds(134, 142, 271, 24);
-		getContentPane().add(txtfStartDate);
+		panelMain.add(txtfStartDate);
 		txtfStartDate.setColumns(10);
 		
 		lblEndDate = new JLabel("End Date");
 		lblEndDate.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblEndDate.setBounds(598, 139, 86, 24);
-		getContentPane().add(lblEndDate);
+		panelMain.add(lblEndDate);
 		
 		txtfEndDate = new JTextField();
 		txtfEndDate.setEditable(false);
@@ -165,10 +188,10 @@ public class ProjectViewTeacher extends JFrame {
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		getStudName(projid);
+		getStudName(projid,section);
 		addDetails(projid);
 	}
-	public void getStudName(int projid)
+	public void getStudName(int projid,String status)
 	{
 		studStarted=new ArrayList<>();
 		studProgress=new ArrayList<>();
@@ -206,17 +229,29 @@ public class ProjectViewTeacher extends JFrame {
 			{
 				studCompleted.add("No Student Found");
 			}
-			
+			/*
 			System.out.println(studStarted);
 			System.out.println(studProgress);
 			System.out.println(studCompleted);
-			
+			*/
 			cmbstudStart.setModel(  new DefaultComboBoxModel<String>(studStarted.toArray(new String[0])) );
 			cmstudinprogress.setModel(  new DefaultComboBoxModel<String>(studProgress.toArray(new String[0]))  );
 			cmbstudComplete.setModel( new DefaultComboBoxModel<String>(studCompleted.toArray(new String[0]))  );
 			
 			
-			panreport.add(lineChart());
+			if(status.equals(HardCodeData.projStatus[0]))
+			{
+				panreport.add(new JLabel("Project haven't Started"));
+			}
+			else if(status.equals(HardCodeData.projStatus[1]))
+			{
+				panreport.add(pieChart());
+			}
+			else if(status.equals(HardCodeData.projStatus[2]))
+			{
+				panreport.add(lineChart());
+			}
+			//panreport.add(lineChart());
 			
 			DatabaseConfig.con.close();
 		} catch (SQLException e) {
@@ -231,7 +266,7 @@ public class ProjectViewTeacher extends JFrame {
 	      dataset.setValue( "Project Completed" , studCompleted.size() );    
 	        
 		JFreeChart chart = ChartFactory.createPieChart(      
-		         "Project OverView",   // chart title 
+		         "Project Progress OverView",   // chart title 
 		         dataset,              // data    
 		         true,                 // include legend   
 		         true, 
@@ -243,13 +278,12 @@ public class ProjectViewTeacher extends JFrame {
 	{
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        dataset.setValue(6, "", "Alex");
+        dataset.setValue(2, "", "Shubhankar Satvaya");
 
-        dataset.setValue(8, "", "Carmen");
+        dataset.setValue(7, "", "Kunal Passi");
 
-        dataset.setValue(12, "", "Tony");
 
-        JFreeChart chart = ChartFactory.createLineChart( "Promedio de calificaciones  2019-2020", "Alumnos", "Calificaciones", 
+        JFreeChart chart = ChartFactory.createLineChart( "Project Analysis Report ", "Student Names", "Days" ,
         		dataset,
         		PlotOrientation.VERTICAL,
         		false,
@@ -277,7 +311,7 @@ public class ProjectViewTeacher extends JFrame {
 			while(DatabaseConfig.rs.next())
 			{
 				setTitle("Project Report of "+DatabaseConfig.rs.getString(1));
-				lblProjectName.setText(DatabaseConfig.rs.getString(1));
+				lblProjectName.setText("Project Name :"+DatabaseConfig.rs.getString(1));
 				txtfStartDate.setText(  sdf.format(  DatabaseConfig.rs.getDate(4)  )   );
 				txtfEndDate.setText(  sdf.format( DatabaseConfig.rs.getDate(5)  )  );
 				txtfTeamLeader.setText(DatabaseConfig.rs.getString(3));
@@ -318,7 +352,7 @@ public class ProjectViewTeacher extends JFrame {
 		}
 	}
 	public static void main(String[] args) {
-		new ProjectViewTeacher(40,HardCodeData.usertype[1]);
+		new ProjectViewTeacher(40,HardCodeData.usertype[1],HardCodeData.projStatus[1]);
 
 	}
 }

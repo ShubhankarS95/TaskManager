@@ -17,8 +17,8 @@ public class Loginpg {
 	        	 
 	            if (g instanceof Graphics2D) {               
 	               Paint p =
-	                  new GradientPaint(0, 0, new Color(255, 26, 26),
-	                  getWidth(), getHeight(), new Color(51, 204, 204), true);
+	                  new GradientPaint(0, 0, new Color(255, 102, 102),
+	                  getWidth(), getHeight(), new Color(255, 121, 77),true);
 	               Graphics2D g2d = (Graphics2D)g;
 	               g2d.setPaint(p);
 	               g2d.fillRect(0, 0, getWidth(), getHeight());
@@ -30,17 +30,18 @@ public class Loginpg {
 	    F1.setContentPane(panel);  
 		F1.getContentPane().setBackground(new Color(255, 255, 255));
 
-		ImageIcon Img1 = new ImageIcon(getClass().getResource("nmanager.png"));
+		ImageIcon Img1 = new ImageIcon(getClass().getResource("T6.png"));
 		JLabel Image1 = new JLabel(Img1);
-		Image1.setBounds(960, 20, 400, 650);
+		Image1.setBounds(923, 34, 402, 527);
 		Image1.setVisible(true);
-		//F1.getContentPane().add(Image1);
+		F1.getContentPane().add(Image1);
 
-		ImageIcon Img2 = new ImageIcon(getClass().getResource("nimg.png"));
+       
+		ImageIcon Img2 = new ImageIcon(getClass().getResource("T8.png"));
 		JLabel Image2 = new JLabel(Img2);
+		Image2.setOpaque(true);
 		Image2.setBounds(0, 20, 400, 650);
 		Image2.setVisible(true);
-		//F1.getContentPane().add(Image2);
 
 		JLabel l1 = new JLabel("Task Manager");
 		l1.setBounds(560, 0, 260, 50);
@@ -67,7 +68,7 @@ public class Loginpg {
 				}
 			}
 		});
-		jt1.setBounds(584, 131, 200, 40);
+		jt1.setBounds(524, 131, 336, 40);
 
 		JPasswordField jt2 = new JPasswordField("Password");
 		jt2.setForeground(Color.GRAY);
@@ -84,13 +85,13 @@ public class Loginpg {
 				}
 			}
 		});
-		jt2.setBounds(584, 196, 200, 40);
+		jt2.setBounds(524, 196, 336, 40);
 
 		JComboBox<String> cmbUserType = new JComboBox<String>();
 		//cmbUserType.setForeground(Color.LIGHT_GRAY);
 		cmbUserType.setBackground(Color.WHITE);
 		cmbUserType.setModel(new DefaultComboBoxModel<String>(HardCodeData.usertype));
-		cmbUserType.setBounds(584, 265, 200, 32);
+		cmbUserType.setBounds(524, 265, 336, 32);
 		//jp1.add(cmbUserType);
 		F1.getContentPane().add(cmbUserType);
 
@@ -115,7 +116,7 @@ public class Loginpg {
 						DatabaseConfig.initialize();
 					
 						System.out.println("Checking Details");
-						DatabaseConfig.rs = DatabaseConfig.stmt.executeQuery("select email,Password from " + usertype + " where email='"+username+"' and Password='"+password+"'");
+						DatabaseConfig.rs = DatabaseConfig.stmt.executeQuery("select email,Password from workhandler." + usertype + " where email='"+username+"' and Password='"+password+"'");
 						int flag=0;
 						while (DatabaseConfig.rs.next()) {
 							//System.out.println("  " + DatabaseConfig.rs.getString(1) + "  " + DatabaseConfig.rs.getInt(2));
@@ -145,17 +146,16 @@ public class Loginpg {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
 				}
 			}
 		});
 
 		JLabel jl2 = new JLabel("New Student");
 		jl2.setFont(new Font("SERIF", Font.BOLD, 18));
-		jl2.setBounds(410, 450, 110, 20);
+		jl2.setBounds(480, 450, 110, 20);
 		JButton jb2 = new JButton("Student Registration");
 		//jb2.setBackground(new Color(255, 255, 179));
-		jb2.setBounds(410, 480, 150, 40);
+		jb2.setBounds(480, 480, 150, 40);
 		jb2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				F1.dispose();
@@ -165,10 +165,10 @@ public class Loginpg {
 
 		JLabel jl3 = new JLabel("New Faculty");
 		jl3.setFont(new Font("SERIF", Font.BOLD, 18));
-		jl3.setBounds(800, 450, 110, 20);
+		jl3.setBounds(750, 450, 110, 20);
 		JButton jb3 = new JButton("Faculty Registration");
 		//jb3.setBackground(new Color(255, 255, 179));
-		jb3.setBounds(800, 480, 150, 40);
+		jb3.setBounds(750, 480, 150, 40);
 		jb3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 

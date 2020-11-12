@@ -52,13 +52,13 @@ public class Mainpg {
 				else
 				{
 					F7.dispose();
-					new ProjectViewTeacher(Integer.parseInt(e.getActionCommand().split("-", -1)[0]),usertype);
+					new ProjectViewTeacher(Integer.parseInt(e.getActionCommand().split("-", -1)[0]),usertype,section);
 				}
 			}
 			else if(usertype.equals(HardCodeData.usertype[3]) )
 			{
 				F7.dispose();
-				new ProjectViewStudent(Integer.parseInt(e.getActionCommand().split("-", -1)[0]));
+				new ProjectViewStudent(Integer.parseInt(e.getActionCommand().split("-", -1)[0]),useremail,section);
 			}
 		}
 	}

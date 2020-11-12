@@ -28,8 +28,8 @@ public class Stureg {
 	        	 
 	            if (g instanceof Graphics2D) {               
 	               Paint p =
-	                  new GradientPaint(0, 0, new Color(255, 26, 26),
-	                  getWidth(), getHeight(), new Color(51, 204, 204), true);
+	                  new GradientPaint(0, 0, new Color(102, 255, 255),
+	                  getWidth(), getHeight(), new Color(77, 195, 255), true);
 	               Graphics2D g2d = (Graphics2D)g;
 	               g2d.setPaint(p);
 	               g2d.fillRect(0, 0, getWidth(), getHeight());
@@ -45,7 +45,7 @@ public class Stureg {
 		l2.setForeground(Color.BLACK);
 		l2.setBounds(450, 0, 750, 50);
 		F2.getContentPane().add(l2);
-
+/*
 		ImageIcon Img7 = new ImageIcon(getClass().getResource("Stu.png"));
 		JLabel Image7 = new JLabel(Img7);
 		Image7.setBounds(960, 20, 400, 650);
@@ -56,7 +56,7 @@ public class Stureg {
 		JLabel Image8 = new JLabel(Img8);
 		Image8.setBounds(10, 20, 400, 650);
 		Image8.setVisible(true);
-		F2.getContentPane().add(Image8);
+		F2.getContentPane().add(Image8); */
 //panelcon Start
 		//JPanel panelcon = new JPanel(null);
 		//panelcon.setBounds(372, 60, 610, 500);
