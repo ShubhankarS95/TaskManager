@@ -30,49 +30,57 @@ public class Mainpg {
 	private JPanel borderpanelTaskCompleted;
 	private JPanel gridpanelTaskCompleted;
 	private JFrame F7;
-	
+
 	private HashMap<Integer, String> projectNamesList;
 	private HashMap<Integer, String> projectNamesProgress;
 	private HashMap<Integer, String> projectNamesCompleted;
-	
-	private static String section,useremail,usertype;
+
+	private static String section, useremail, usertype;
 
 	private class TasksButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// JOptionPane.showMessageDialog(null," "+e.getActionCommand());
 			// System.out.println(e.getActionCommand().split("-",-1)[0]);
-			if(usertype.equals(HardCodeData.usertype[1]) || usertype.equals(HardCodeData.usertype[2]) )
-			{
-				if (e.getActionCommand().equals("ADD PROJECT"))
-				{	
+			if (usertype.equals(HardCodeData.usertype[1]) || usertype.equals(HardCodeData.usertype[2])) {
+				if (e.getActionCommand().equals("ADD PROJECT")) {
 					F7.dispose();
-					new NewProjectDetails();				
-				}
-				else
-				{
+					new NewProjectDetails(useremail, usertype);
+				} else {
 					F7.dispose();
-					new ProjectViewTeacher(Integer.parseInt(e.getActionCommand().split("-", -1)[0]),usertype,section);
+					new ProjectViewTeacher(Integer.parseInt(e.getActionCommand().split("-", -1)[0]),useremail, usertype, section);
 				}
-			}
-			else if(usertype.equals(HardCodeData.usertype[3]) )
-			{
+			} else if (usertype.equals(HardCodeData.usertype[3])) {
 				F7.dispose();
-				new ProjectViewStudent(Integer.parseInt(e.getActionCommand().split("-", -1)[0]),useremail,section);
+				new ProjectViewStudent(Integer.parseInt(e.getActionCommand().split("-", -1)[0]), useremail, section);
 			}
 		}
 	}
 
 	public Mainpg(String useremailname, String utype) {
-		useremail=useremailname;
-		usertype=utype;
-		
-		
+		useremail = useremailname;
+		usertype = utype;
+
 		F7 = new JFrame("Main Dashboard of " + getUserName(useremailname, usertype));
-		F7.getContentPane().setBackground(Color.WHITE);
+		// F7.getContentPane().setBackground(Color.WHITE);
+		JPanel panel = new javax.swing.JPanel() {
+			protected void paintComponent(Graphics g) {
+
+				if (g instanceof Graphics2D) {
+					Paint p = new GradientPaint(0, 0, new Color(255, 51, 0), getWidth(), getHeight(),
+							new Color(255, 0, 102), true);
+					Graphics2D g2d = (Graphics2D) g;
+					g2d.setPaint(p);
+					g2d.fillRect(0, 0, getWidth(), getHeight());
+				} else {
+					super.paintComponent(g);
+				}
+			}
+		};
+		F7.setContentPane(panel);
 
 		back1 = new JButton("Logout");
-		back1.setBounds(600, 600, 150, 40);
+		back1.setBounds(613, 561, 150, 40);
 		back1.setBorder(null);
 		// back.setBackground(Color.WHITE);
 		back1.addActionListener(new ActionListener() {
@@ -93,47 +101,53 @@ public class Mainpg {
 
 		l7 = new JLabel("TASK MANAGER");
 		l7.setHorizontalAlignment(SwingConstants.CENTER);
-		l7.setForeground(Color.PINK);
+		l7.setForeground(Color.black);
 		l7.setBounds(328, 0, 700, 50);
 		l7.setFont(new Font("SERIF", Font.BOLD, 40));
 		F7.getContentPane().add(l7);
-
-		panel7 = new JPanel(null);
-		panel7.setBounds(328, 73, 700, 400);
-		panel7.setBackground(new Color(153, 255, 153));
-		F7.getContentPane().add(panel7);
-
+		/*
+		 * panel7 = new JPanel(null); panel7.setBounds(328, 73, 700, 400);
+		 * panel7.setBackground(new Color(153, 255, 153));
+		 * F7.getContentPane().add(panel7);
+		 */
 		Todo = new JButton("List of Work");
-		Todo.setBounds(24, 10, 170, 30);
+		Todo.setBounds(355, 140, 170, 30);
 		Todo.setBorder(null);
-		Todo.setBackground(Color.YELLOW);
+		// Todo.setBackground(Color.YELLOW);
 		Todo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				scpaneTaskList.setVisible(true);
 				scpaneTaskinProgress.setVisible(false);
 				scpaneTaskCompleted.setVisible(false);
-				section=HardCodeData.projStatus[0];
-				
+				section = HardCodeData.projStatus[0];
+
 				// System.out.println("Button Task List :"+projectNames.values());
 
 				Component[] complist = gridpanelTaskList.getComponents();
 				for (Component c : complist) {
 					gridpanelTaskList.remove(c);
 				}
-				
+
 				JButton buttontasklist[];
-				if(usertype.equals(HardCodeData.usertype[2])  ||  usertype.equals(HardCodeData.usertype[1]))
-				{
-					buttontasklist= new JButton[projectNamesList.size()+1];
+				if (usertype.equals(HardCodeData.usertype[2]) || usertype.equals(HardCodeData.usertype[1])) {
+					buttontasklist = new JButton[projectNamesList.size() + 1];
+				} else {
+					buttontasklist = new JButton[projectNamesList.size()];
 				}
-				else
-				{
-					buttontasklist= new JButton[projectNamesList.size()];
-				}
-				
+
 				int j = 0;
 				TasksButtonListener taskbutListener = new TasksButtonListener();
+				if (usertype.equals(HardCodeData.usertype[2]) || usertype.equals(HardCodeData.usertype[1])) {
+					buttontasklist[j] = new JButton("ADD PROJECT");
+					buttontasklist[j].addActionListener(taskbutListener);
+
+					JPanel perpanel = new JPanel();
+					perpanel.add(buttontasklist[j]);
+					j++;
+					gridpanelTaskList.add(perpanel);
+				}
+
 				for (Map.Entry key : projectNamesList.entrySet()) {
 					buttontasklist[j] = new JButton(key.getKey().toString() + "-" + key.getValue().toString());
 					buttontasklist[j].addActionListener(taskbutListener);
@@ -141,29 +155,18 @@ public class Mainpg {
 					JPanel perpanel = new JPanel();
 					perpanel.add(buttontasklist[j]);
 					j++;
-
 					gridpanelTaskList.add(perpanel);
 				}
-				if(usertype.equals(HardCodeData.usertype[2])  ||  usertype.equals(HardCodeData.usertype[1]))
-				{
-					buttontasklist[j] = new JButton("ADD PROJECT");
-					buttontasklist[j].addActionListener(taskbutListener);
 
-					JPanel perpanel = new JPanel();
-					perpanel.add(buttontasklist[j]);
-					
-					gridpanelTaskList.add(perpanel);
-				}
-				if(usertype.equals(HardCodeData.usertype[3]) && projectNamesList.size()==0 )
-				{
-					JLabel lbl=new JLabel("No Project Found");
+				if (usertype.equals(HardCodeData.usertype[3]) && projectNamesList.size() == 0) {
+					JLabel lbl = new JLabel("No Project Found");
 
 					JPanel perpanel = new JPanel();
 					perpanel.add(lbl);
-					
+
 					gridpanelTaskList.add(perpanel);
 				}
-				
+
 				gridpanelTaskList.repaint();
 				borderpanleTaskList.repaint();
 				scpaneTaskList.repaint();
@@ -173,107 +176,107 @@ public class Mainpg {
 		});
 
 		Todoing = new JButton("In-Progress");
-		Todoing.setBounds(245, 10, 170, 30);
+		Todoing.setBounds(588, 140, 170, 30);
 		Todoing.setBorder(null);
-		Todoing.setBackground(Color.YELLOW);
+		// Todoing.setBackground(Color.YELLOW);
 		Todoing.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				scpaneTaskList.setVisible(false);
 				scpaneTaskinProgress.setVisible(true);
 				scpaneTaskCompleted.setVisible(false);
-				section=HardCodeData.projStatus[1];
-				
+				section = HardCodeData.projStatus[1];
+
 				Component[] complist = gridpanelTaskinProgress.getComponents();
 				for (Component c : complist) {
 					gridpanelTaskinProgress.remove(c);
 				}
-				JButton buttontasklist[] = new JButton[projectNamesProgress.size()];
-				
-				int j = 0;
-				TasksButtonListener taskbutListener = new TasksButtonListener();
-				for (Map.Entry key : projectNamesProgress.entrySet()) {
-					buttontasklist[j] = new JButton(key.getKey().toString() + "-" + key.getValue().toString());
-					buttontasklist[j].addActionListener(taskbutListener);
-
-					JPanel perpanel = new JPanel();
-					perpanel.add(buttontasklist[j]);
-					j++;
-
-					gridpanelTaskinProgress.add(perpanel);
-				}
-				if(usertype.equals(HardCodeData.usertype[3]) && projectNamesProgress.size()==0 )
-				{
-					JLabel lbl=new JLabel("No Project Found");
+				if (projectNamesProgress.size() == 0) {
+					JLabel lbl = new JLabel("No Project Found");
 
 					JPanel perpanel = new JPanel();
 					perpanel.add(lbl);
-					
+
 					gridpanelTaskinProgress.add(perpanel);
+				} else {
+					JButton buttontasklist[] = new JButton[projectNamesProgress.size()];
+
+					int j = 0;
+					TasksButtonListener taskbutListener = new TasksButtonListener();
+					for (Map.Entry key : projectNamesProgress.entrySet()) {
+						buttontasklist[j] = new JButton(key.getKey().toString() + "-" + key.getValue().toString());
+						buttontasklist[j].addActionListener(taskbutListener);
+
+						JPanel perpanel = new JPanel();
+						perpanel.add(buttontasklist[j]);
+						j++;
+
+						gridpanelTaskinProgress.add(perpanel);
+					}
 				}
-				
+
 				gridpanelTaskinProgress.repaint();
 				borderpanelTaskinProgress.repaint();
 				scpaneTaskinProgress.repaint();
 				scpaneTaskinProgress.revalidate();
-				
+
 			}
 		});
 
 		Done = new JButton("Completed Works");
-		Done.setBounds(493, 10, 170, 30);
+		Done.setBounds(824, 140, 170, 30);
 		Done.setBorder(null);
-		Done.setBackground(Color.YELLOW);
+		// Done.setBackground(Color.YELLOW);
 		Done.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				scpaneTaskList.setVisible(false);
 				scpaneTaskinProgress.setVisible(false);
 				scpaneTaskCompleted.setVisible(true);
-				section=HardCodeData.projStatus[2];
-				
+				section = HardCodeData.projStatus[2];
+
 				Component[] complist = gridpanelTaskCompleted.getComponents();
 				for (Component c : complist) {
 					gridpanelTaskCompleted.remove(c);
 				}
-				JButton buttontasklist[] = new JButton[projectNamesCompleted.size()];
-				
-				int j = 0;
-				TasksButtonListener taskbutListener = new TasksButtonListener();
-				for (Map.Entry key : projectNamesCompleted.entrySet()) {
-					buttontasklist[j] = new JButton(key.getKey().toString() + "-" + key.getValue().toString());
-					buttontasklist[j].addActionListener(taskbutListener);
-
-					JPanel perpanel = new JPanel();
-					perpanel.add(buttontasklist[j]);
-					j++;
-
-					gridpanelTaskCompleted.add(perpanel);
-				}
-				if(usertype.equals(HardCodeData.usertype[3]) && projectNamesCompleted.size()==0 )
-				{
-					JLabel lbl=new JLabel("No Project Found");
+				if (projectNamesCompleted.size() == 0) {
+					JLabel lbl = new JLabel("No Project Found");
 
 					JPanel perpanel = new JPanel();
 					perpanel.add(lbl);
-					
+
 					gridpanelTaskCompleted.add(perpanel);
+				} else {
+					JButton buttontasklist[] = new JButton[projectNamesCompleted.size()];
+
+					int j = 0;
+					TasksButtonListener taskbutListener = new TasksButtonListener();
+					for (Map.Entry key : projectNamesCompleted.entrySet()) {
+						buttontasklist[j] = new JButton(key.getKey().toString() + "-" + key.getValue().toString());
+						buttontasklist[j].addActionListener(taskbutListener);
+
+						JPanel perpanel = new JPanel();
+						perpanel.add(buttontasklist[j]);
+						j++;
+
+						gridpanelTaskCompleted.add(perpanel);
+					}
 				}
-				
+
 				gridpanelTaskCompleted.repaint();
 				borderpanelTaskCompleted.repaint();
 				scpaneTaskCompleted.repaint();
 				scpaneTaskCompleted.revalidate();
-				
+
 			}
 		});
-		panel7.add(Todo);
-		panel7.add(Todoing);
-		panel7.add(Done);
+		F7.getContentPane().add(Todo);
+		F7.getContentPane().add(Todoing);
+		F7.getContentPane().add(Done);
 
 		scpaneTaskList = new JScrollPane();
-		scpaneTaskList.setBounds(20, 60, 190, 300);
+		scpaneTaskList.setBounds(351, 190, 190, 300);
 		scpaneTaskList.setVisible(false);
-		panel7.add(scpaneTaskList);
+		F7.getContentPane().add(scpaneTaskList);
 
 		borderpanleTaskList = new JPanel();
 		scpaneTaskList.setViewportView(borderpanleTaskList);
@@ -284,9 +287,9 @@ public class Mainpg {
 		gridpanelTaskList.setLayout(new GridLayout(0, 1));
 
 		scpaneTaskinProgress = new JScrollPane();
-		scpaneTaskinProgress.setBounds(250, 60, 190, 300);
+		scpaneTaskinProgress.setBounds(581, 190, 190, 300);
 		scpaneTaskinProgress.setVisible(false);
-		panel7.add(scpaneTaskinProgress);
+		F7.getContentPane().add(scpaneTaskinProgress);
 
 		borderpanelTaskinProgress = new JPanel();
 		scpaneTaskinProgress.setViewportView(borderpanelTaskinProgress);
@@ -297,9 +300,9 @@ public class Mainpg {
 		gridpanelTaskinProgress.setLayout(new GridLayout(0, 1));
 
 		scpaneTaskCompleted = new JScrollPane();
-		scpaneTaskCompleted.setBounds(490, 60, 190, 300);
+		scpaneTaskCompleted.setBounds(821, 190, 190, 300);
 		scpaneTaskCompleted.setVisible(false);
-		panel7.add(scpaneTaskCompleted);
+		F7.getContentPane().add(scpaneTaskCompleted);
 
 		borderpanelTaskCompleted = new JPanel();
 		scpaneTaskCompleted.setViewportView(borderpanelTaskCompleted);
@@ -315,11 +318,7 @@ public class Mainpg {
 		F7.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		getProjectName(useremailname, usertype);
-		System.out.println("Consturctor");
-	}
-
-	public static void main(String[] args) {
-		new Mainpg("Shubhankar@xyz.com","STUDENT");
+		System.out.println("Dashboard Consturctor");
 	}
 
 	private String getUserName(String useremail, String usertype) {
@@ -358,10 +357,10 @@ public class Mainpg {
 
 	private void getProjectName(String useremailname, String userType) {
 
-		projectNamesList=new HashMap<Integer, String>();
-		projectNamesProgress=new HashMap<Integer, String>();
-		projectNamesCompleted=new HashMap<Integer, String>();
-		
+		projectNamesList = new HashMap<Integer, String>();
+		projectNamesProgress = new HashMap<Integer, String>();
+		projectNamesCompleted = new HashMap<Integer, String>();
+
 		try {
 			DatabaseConfig.initialize();
 
@@ -369,78 +368,63 @@ public class Mainpg {
 			{
 				DatabaseConfig.rs = DatabaseConfig.stmt.executeQuery(
 						"Select ps.ProjectId,p.Project_Name,ps.ProjStatus FROM workhandler.projectdetails p,workhandler.studprojectstatus ps "
-						+ "where p.ProjectId=ps.ProjectId and ps.StudEmail='"+useremailname+"';");
-				
+								+ "where p.ProjectId=ps.ProjectId and ps.StudEmail='" + useremailname + "';");
+
 				while (DatabaseConfig.rs.next()) {
-					if(DatabaseConfig.rs.getString(3).equals(HardCodeData.projStatus[0]))
-					{
-						projectNamesList.put( DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2) );
+					if (DatabaseConfig.rs.getString(3).equals(HardCodeData.projStatus[0])) {
+						projectNamesList.put(DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2));
+					} else if (DatabaseConfig.rs.getString(3).equals(HardCodeData.projStatus[1])) {
+						projectNamesProgress.put(DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2));
+					} else if (DatabaseConfig.rs.getString(3).equals(HardCodeData.projStatus[2])) {
+						projectNamesCompleted.put(DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2));
 					}
-					else if(DatabaseConfig.rs.getString(3).equals(HardCodeData.projStatus[1]))
-					{
-						projectNamesProgress.put( DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2) );
-					}
-					else if(DatabaseConfig.rs.getString(3).equals(HardCodeData.projStatus[2]))
-					{
-						projectNamesCompleted.put( DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2) );
-					}
-					
+
 				}
 			} else if (userType.equals(HardCodeData.usertype[2]))// for faculty
 			{
-				DatabaseConfig.rs = DatabaseConfig.stmt
-						.executeQuery("select projectid,project_name,start_date,end_date from workhandler.projectdetails where TeamLeaderEmail='"+useremailname+"';");
-				Date curr=new Date();
-				Date startDate,endDate;
-				
+				DatabaseConfig.rs = DatabaseConfig.stmt.executeQuery(
+						"select projectid,project_name,start_date,end_date from workhandler.projectdetails where TeamLeaderEmail='"
+								+ useremailname + "';");
+				Date curr = new Date();
+				Date startDate, endDate;
+
 				while (DatabaseConfig.rs.next()) {
-					startDate=DatabaseConfig.rs.getDate(3);
-					endDate=DatabaseConfig.rs.getDate(4);
-					if(startDate.compareTo(curr)>0)  
-					{
-						System.out.println("1 :"+DatabaseConfig.rs.getInt(1)+" "+startDate+" "+endDate);
-						projectNamesList.put( DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2) );
-					}
-					else if(startDate.compareTo(curr)<=0  && endDate.compareTo(curr)>=0)
-					{
-						System.out.println("2 "+DatabaseConfig.rs.getInt(1)+" "+startDate+" "+endDate);
-						projectNamesProgress.put( DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2) );
-						
-					}
-					else if(endDate.compareTo(curr)<0)
-					{
-						System.out.println("3 "+DatabaseConfig.rs.getInt(1)+" "+startDate+" "+endDate);
-						projectNamesCompleted.put( DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2) );
-					}
-				}			
-			} else // for admin
-			{
-				DatabaseConfig.rs = DatabaseConfig.stmt
-						.executeQuery("select projectid,project_name,start_date,end_date from workhandler.projectdetails;");
-				Date curr=new Date();
-				Date startDate,endDate;
-				
-				while (DatabaseConfig.rs.next()) {
-					startDate=DatabaseConfig.rs.getDate(3);
-					endDate=DatabaseConfig.rs.getDate(4);
-					if(startDate.compareTo(curr)>0)  
-					{
-						System.out.println("1 :"+DatabaseConfig.rs.getInt(1)+" "+startDate+" "+endDate);
-						projectNamesList.put( DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2) );
-					}
-					else if(startDate.compareTo(curr)<=0  && endDate.compareTo(curr)>=0)
-					{
-						System.out.println("2 "+DatabaseConfig.rs.getInt(1)+" "+startDate+" "+endDate);
-						projectNamesProgress.put( DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2) );
-						
-					}
-					else if(endDate.compareTo(curr)<0)
-					{
-						System.out.println("3 "+DatabaseConfig.rs.getInt(1)+" "+startDate+" "+endDate);
-						projectNamesCompleted.put( DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2) );
+					startDate = DatabaseConfig.rs.getDate(3);
+					endDate = DatabaseConfig.rs.getDate(4);
+					if (startDate.compareTo(curr) > 0) {
+						System.out.println("1 :" + DatabaseConfig.rs.getInt(1) + " " + startDate + " " + endDate);
+						projectNamesList.put(DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2));
+					} else if (startDate.compareTo(curr) <= 0 && endDate.compareTo(curr) >= 0) {
+						System.out.println("2 " + DatabaseConfig.rs.getInt(1) + " " + startDate + " " + endDate);
+						projectNamesProgress.put(DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2));
+
+					} else if (endDate.compareTo(curr) < 0) {
+						System.out.println("3 " + DatabaseConfig.rs.getInt(1) + " " + startDate + " " + endDate);
+						projectNamesCompleted.put(DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2));
 					}
 				}
-				
+			} else // for admin
+			{
+				DatabaseConfig.rs = DatabaseConfig.stmt.executeQuery(
+						"select projectid,project_name,start_date,end_date from workhandler.projectdetails;");
+				Date curr = new Date();
+				Date startDate, endDate;
+
+				while (DatabaseConfig.rs.next()) {
+					startDate = DatabaseConfig.rs.getDate(3);
+					endDate = DatabaseConfig.rs.getDate(4);
+					if (startDate.compareTo(curr) > 0) {
+						System.out.println("1 :" + DatabaseConfig.rs.getInt(1) + " " + startDate + " " + endDate);
+						projectNamesList.put(DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2));
+					} else if (startDate.compareTo(curr) <= 0 && endDate.compareTo(curr) >= 0) {
+						System.out.println("2 " + DatabaseConfig.rs.getInt(1) + " " + startDate + " " + endDate);
+						projectNamesProgress.put(DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2));
+
+					} else if (endDate.compareTo(curr) < 0) {
+						System.out.println("3 " + DatabaseConfig.rs.getInt(1) + " " + startDate + " " + endDate);
+						projectNamesCompleted.put(DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2));
+					}
+				}
 			}
 			DatabaseConfig.con.close();
 
@@ -448,6 +432,11 @@ public class Mainpg {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
 	}
+
+	public static void main(String[] args) {
+		// new Mainpg("Shubhankar@xyz.com","STUDENT");
+		new Mainpg("Admin/Dean", "DEAN");
+	}
+
 }

@@ -196,16 +196,16 @@ public class Stureg {
 
 //Password Field Start	    
 		JLabel labelps = new JLabel("Create Password");
-		labelps.setBounds(372, 563, 150, 70);
+		labelps.setBounds(412, 523, 150, 70);
 		labelps.setFont(new Font("Serif", Font.PLAIN, 20));
 		JPasswordField pswd1 = new JPasswordField();
-		pswd1.setBounds(515, 587, 150, 30);
+		pswd1.setBounds(555, 547, 150, 30);
 
 		JLabel labelpswd = new JLabel("Confirm password");
-		labelpswd.setBounds(675, 563, 150, 70);
+		labelpswd.setBounds(715, 523, 150, 70);
 		labelpswd.setFont(new Font("Serif", Font.PLAIN, 20));
 		JPasswordField pswd2 = new JPasswordField();
-		pswd2.setBounds(832, 587, 150, 30);
+		pswd2.setBounds(872, 547, 150, 30);
 //Password Field Ends	    
 
 //Button Field Start

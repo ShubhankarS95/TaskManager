@@ -20,6 +20,7 @@ import dbdetails.HardCodeData;
 
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import javax.swing.border.EmptyBorder;
 
 public class NewProjectDetails {
 	JPanel panelt;
@@ -38,7 +39,7 @@ public class NewProjectDetails {
 	private JLabel labelpswd;
 	private JPasswordField pswd;
 	private JButton sub;
-	private JButton back1;
+	private JButton btnLogout;
 	private JDateChooser datechStartD;
 	private JDateChooser dateChooserEndD;
 	private JScrollPane scrollPane;
@@ -51,8 +52,9 @@ public class NewProjectDetails {
 	private static String[] coursenames = { "Btech-CS", "Btech-Mech", "MCA", "BCA", "Bsc", "MSC" };
 	private JComboBox cmbTLeader;
 	private HashMap<String, String> teacherNames;
+	private JButton btnBack;
 
-	public NewProjectDetails() {
+	public NewProjectDetails(String username, String usertype) {
 		JFrame F5 = new JFrame("Project Details");
 		// F5.getContentPane().setBackground(Color.white);
 		JPanel panel = new javax.swing.JPanel() {
@@ -81,18 +83,17 @@ public class NewProjectDetails {
 		F5.getContentPane().add(Image9).setVisible(true);
 
 		l4 = new JLabel("Task Manager");
-		l4.setBounds(540, 1, 260,50);
+		l4.setBounds(540, 1, 260, 50);
 		l4.setForeground(Color.black);
 		l4.setFont(new Font("SERIF", Font.BOLD, 40));
 		F5.getContentPane().add(l4);
 
 //panel5 start
 		/*
-		 JPanel panel5 = new JPanel(null);
-		panel5.setName("Enter Project Details");
-		panel5.setBounds(394, 60, 577, 609);
-		panel5.setBackground(new Color(255, 204, 255));
-*/
+		 * JPanel panel5 = new JPanel(null); panel5.setName("Enter Project Details");
+		 * panel5.setBounds(394, 60, 577, 609); panel5.setBackground(new Color(255, 204,
+		 * 255));
+		 */
 		labelpn = new JLabel("Project Name");
 		labelpn.setBounds(668, 62, 150, 70);
 		labelpn.setFont(new Font("Serif", Font.PLAIN, 25));
@@ -108,12 +109,14 @@ public class NewProjectDetails {
 		labeld1.setFont(new Font("Serif", Font.PLAIN, 25));
 		datechStartD = new JDateChooser(new Date());
 		datechStartD.setBounds(906, 194, 173, 30);
+		datechStartD.setMinSelectableDate(new Date());
 
 		labeld2 = new JLabel("End Date");
 		labeld2.setBounds(668, 228, 165, 70);
 		labeld2.setFont(new Font("Serif", Font.PLAIN, 25));
 		dateChooserEndD = new JDateChooser(new Date());
 		dateChooserEndD.setBounds(906, 250, 173, 30);
+		dateChooserEndD.setMinSelectableDate(new Date());
 
 		labelcourse = new JLabel("Set Course");
 		labelcourse.setBounds(668, 290, 165, 64);
@@ -187,7 +190,7 @@ public class NewProjectDetails {
 					}
 
 					DatabaseConfig.ps = DatabaseConfig.con
-							.prepareStatement("insert into workhandler.studprojectstatus values(?,?,?);");
+							.prepareStatement("insert into workhandler.studprojectstatus (ProjStatus,StudEmail,ProjectId) values(?,?,?);");
 					for (String em : studemailid) {
 						DatabaseConfig.ps.setString(1, HardCodeData.projStatus[0]); // for student setting status as
 																					// assigned
@@ -198,23 +201,21 @@ public class NewProjectDetails {
 
 						// System.out.println(t.getText());
 					}
-
 					DatabaseConfig.con.close();
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
 				JOptionPane.showMessageDialog(null, "Project " + projectName + " Assigned ");
 			}
 		});
-		sub.setBorder(null);
-		sub.setBounds(693, 616, 140, 30);
+		// sub.setBorder(null);
+		sub.setBounds(639, 616, 125, 30);
 
-		back1 = new JButton("Logout");
-		back1.setBounds(917, 616, 140, 30);
-		back1.setBorder(null);
-		back1.addActionListener(new ActionListener() {
+		btnLogout = new JButton("Logout");
+		btnLogout.setBounds(1012, 616, 106, 30);
+		// back1.setBorder(null);
+		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				F5.dispose();
 				new Loginpg();
@@ -290,7 +291,7 @@ public class NewProjectDetails {
 		F5.getContentPane().add(pswd);
 
 		F5.getContentPane().add(sub);
-		F5.getContentPane().add(back1);
+		F5.getContentPane().add(btnLogout);
 
 		F5.getContentPane().add(datechStartD);
 		F5.getContentPane().add(dateChooserEndD);
@@ -304,7 +305,7 @@ public class NewProjectDetails {
 		 * panel5.add(panelt);
 		 */
 		// new panel ends
-		//F5.getContentPane().add(panel5);
+		// F5.getContentPane().add(panel5);
 
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(639, 462, 479, 122);
@@ -320,7 +321,7 @@ public class NewProjectDetails {
 		gridpanel = new JPanel();
 
 		borderpanel.add(gridpanel, BorderLayout.NORTH);
-		borderpanel.setBackground(new Color(255, 204, 255));
+		// borderpanel.setBackground(new Color(255, 204, 255));
 		gridpanel.setLayout(new GridLayout(0, 1));
 
 		cmbCourse = new JComboBox(coursenames);
@@ -328,27 +329,43 @@ public class NewProjectDetails {
 		cmbCourse.setBounds(906, 313, 173, 30);
 		F5.getContentPane().add(cmbCourse);
 
-		cmbTLeader = new JComboBox(new DefaultComboBoxModel<String>(getTechersName().toArray(new String[0])));
+		cmbTLeader = new JComboBox(new DefaultComboBoxModel<String>(getTechersName(username,usertype).toArray(new String[0])));
 		cmbTLeader.setBackground(Color.WHITE);
 		cmbTLeader.setBounds(906, 139, 173, 30);
 		F5.getContentPane().add(cmbTLeader);
 
 		F5.getContentPane().setLayout(null);
+
+		btnBack = new JButton("Back to Dashboard");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				F5.dispose();
+				new Mainpg(username, usertype);
+			}
+		});
+		btnBack.setBounds(822, 616, 150, 30);
+		panel.add(btnBack);
 		F5.setSize(1365, 730);
 		F5.setVisible(true);
 		F5.setLocationRelativeTo(null);
 		F5.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	private ArrayList<String> getTechersName() {
+	private ArrayList<String> getTechersName(String umail, String utype) {
 		teacherNames = new HashMap<String, String>();
 		try {
 			DatabaseConfig.initialize();
-			DatabaseConfig.rs = DatabaseConfig.stmt
-					.executeQuery("select Firstname,Lastname,email from workhandler.faculty;");
+
+			if (utype.equals(HardCodeData.usertype[1])) // admin 
+			{
+				DatabaseConfig.rs = DatabaseConfig.stmt
+						.executeQuery("select Firstname,Lastname,email from workhandler.faculty;");
+			} else if (utype.equals(HardCodeData.usertype[2])) // Faculty
+			{
+				DatabaseConfig.rs = DatabaseConfig.stmt
+						.executeQuery("select Firstname,Lastname,email from workhandler.faculty where email='"+umail+"';");
+			}
 			while (DatabaseConfig.rs.next()) {
-				// teacherNames.add(DatabaseConfig.rs.getString(1)+"
-				// "+DatabaseConfig.rs.getString(2));
 				teacherNames.put(DatabaseConfig.rs.getString(3),
 						DatabaseConfig.rs.getString(1) + " " + DatabaseConfig.rs.getString(2));
 			}
@@ -363,6 +380,6 @@ public class NewProjectDetails {
 	}
 
 	public static void main(String[] args) {
-		new NewProjectDetails();
+		new NewProjectDetails("Admin/Dean", "DEAN");
 	}
 }

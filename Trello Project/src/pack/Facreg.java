@@ -147,30 +147,30 @@ public class Facreg {
 
 		// Password Field Start
 		JLabel labelps = new JLabel("Create Password");
-		labelps.setBounds(372, 563, 150, 70);
+		labelps.setBounds(372, 515, 150, 70);
 		labelps.setFont(new Font("Serif", Font.PLAIN, 20));
 		F3.getContentPane().add(labelps);
 
 		JPasswordField pswd1 = new JPasswordField();
-		pswd1.setBounds(515, 587, 150, 30);
+		pswd1.setBounds(515, 539, 150, 30);
 		F3.getContentPane().add(pswd1);
 
 		JLabel labelpswd = new JLabel("Confirm password");
-		labelpswd.setBounds(675, 563, 150, 70);
+		labelpswd.setBounds(675, 515, 150, 70);
 		labelpswd.setFont(new Font("Serif", Font.PLAIN, 20));
 		F3.getContentPane().add(labelpswd);
 
 		JPasswordField pswd2 = new JPasswordField();
-		pswd2.setBounds(832, 587, 150, 30);
+		pswd2.setBounds(832, 539, 150, 30);
 		F3.getContentPane().add(pswd2);
 //Password Field Ends
 
 		JButton b4 = new JButton("Exit");
-		b4.setBounds(725, 630, 150, 40);
+		b4.setBounds(758, 630, 150, 40);
 		F3.getContentPane().add(b4);
 
 		JButton b3 = new JButton("Register");
-		b3.setBounds(544, 630, 150, 40);
+		b3.setBounds(434, 630, 150, 40);
 		F3.getContentPane().add(b3);
 		b3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

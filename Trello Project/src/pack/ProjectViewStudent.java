@@ -2,6 +2,8 @@ package pack;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -25,6 +27,7 @@ import java.awt.Paint;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.awt.event.ActionListener;
@@ -71,32 +74,32 @@ public class ProjectViewStudent extends JFrame {
 
 		lblstartdate = new JLabel("Start Date");
 		lblstartdate.setHorizontalAlignment(SwingConstants.CENTER);
-		lblstartdate.setBounds(43, 100, 113, 25);
+		lblstartdate.setBounds(25, 100, 113, 25);
 		lblstartdate.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panelMain.add(lblstartdate);
 
 		txtFStartDate = new JTextField();
 		txtFStartDate.setFont(new Font("Tahoma", Font.BOLD, 16));
-		txtFStartDate.setBounds(183, 100, 190, 29);
+		txtFStartDate.setBounds(166, 100, 190, 29);
 		txtFStartDate.setEditable(false);
 		txtFStartDate.setColumns(10);
 		panelMain.add(txtFStartDate);
 
 		lblendDate = new JLabel("End Date");
 		lblendDate.setHorizontalAlignment(SwingConstants.CENTER);
-		lblendDate.setBounds(426, 100, 95, 25);
+		lblendDate.setBounds(478, 100, 95, 25);
 		lblendDate.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panelMain.add(lblendDate);
 
 		txtFEndDate = new JTextField();
 		txtFEndDate.setFont(new Font("Tahoma", Font.BOLD, 15));
-		txtFEndDate.setBounds(531, 101, 190, 31);
+		txtFEndDate.setBounds(615, 99, 190, 31);
 		txtFEndDate.setEditable(false);
 		txtFEndDate.setColumns(10);
 		panelMain.add(txtFEndDate);
 
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(67, 220, 554, 181);
+		scrollPane.setBounds(152, 221, 554, 181);
 		panelMain.add(scrollPane);
 
 		panelBorder = new JPanel();
@@ -110,17 +113,55 @@ public class ProjectViewStudent extends JFrame {
 		btnSubmit = new JButton("Submit Project");
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				lblprojName.setText("Hello Shubhankar");
+
+				int flag=0;
+				for(JCheckBox i:tlist)
+				{
+					if(i.isSelected()==false)
+					{	flag=1;
+						break;
+					}
+				}
+				if(flag==1)
+				{
+					JOptionPane.showMessageDialog(null, "First complete all Sub-Task, then only you can Submit the Project!!!");
+				}
+				else
+				{
+					updateDetails(studemail,projectid);
+					
+					
+				}
 			}
 		});
 		btnSubmit.setFont(new Font("Tahoma", Font.BOLD, 15));
-		btnSubmit.setBounds(360, 429, 213, 36);
+		btnSubmit.setBounds(542, 480, 146, 36);
 		btnSubmit.setVisible(false);
 		panelMain.add(btnSubmit);
 
 		btnstart = new JButton("Start Project");
+		btnstart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+
+				try {
+					DatabaseConfig.initialize();
+
+					int row = DatabaseConfig.stmt.executeUpdate(
+							"update workhandler.studprojectstatus " + "set Projstatus='" + HardCodeData.projStatus[1]
+									+ "' " + " where studemail='" + studemail + "' and ProjectId=" + projectid + ";");
+
+					DatabaseConfig.con.close();
+
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				new ProjectViewStudent(1, studemail, HardCodeData.projStatus[1]);
+
+			}
+		});
 		btnstart.setFont(new Font("Tahoma", Font.BOLD, 15));
-		btnstart.setBounds(259, 476, 154, 31);
+		btnstart.setBounds(372, 427, 154, 43);
 		btnstart.setVisible(false);
 		panelMain.add(btnstart);
 
@@ -134,7 +175,7 @@ public class ProjectViewStudent extends JFrame {
 		txtFTeamLeader.setFont(new Font("Tahoma", Font.BOLD, 15));
 		txtFTeamLeader.setEditable(false);
 		txtFTeamLeader.setColumns(10);
-		txtFTeamLeader.setBounds(183, 157, 190, 29);
+		txtFTeamLeader.setBounds(166, 157, 190, 29);
 		panelMain.add(txtFTeamLeader);
 
 		lblteamleaderemail = new JLabel("Team Leader Email");
@@ -147,7 +188,7 @@ public class ProjectViewStudent extends JFrame {
 		txtFTeamLeaderEmail.setFont(new Font("Tahoma", Font.BOLD, 15));
 		txtFTeamLeaderEmail.setEditable(false);
 		txtFTeamLeaderEmail.setColumns(10);
-		txtFTeamLeaderEmail.setBounds(575, 159, 190, 29);
+		txtFTeamLeaderEmail.setBounds(615, 157, 190, 29);
 		panelMain.add(txtFTeamLeaderEmail);
 
 		lblprojName = new JLabel("");
@@ -157,8 +198,13 @@ public class ProjectViewStudent extends JFrame {
 		panelMain.add(lblprojName);
 
 		btnSave = new JButton("Save Project Status");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				updateDetails(studemail,projectid);
+			}
+		});
 		btnSave.setFont(new Font("Tahoma", Font.BOLD, 15));
-		btnSave.setBounds(92, 426, 209, 36);
+		btnSave.setBounds(147, 480, 209, 36);
 		btnSave.setVisible(false);
 		panelMain.add(btnSave);
 
@@ -171,6 +217,26 @@ public class ProjectViewStudent extends JFrame {
 		setTitle(" Project Details for " + getUserName(studemail));
 
 		System.out.println("Project Student");
+	}
+
+	private void updateDetails(String studemail,int pid) {
+		try {
+			DatabaseConfig.initialize();
+			DatabaseConfig.ps = DatabaseConfig.con.prepareStatement(
+					"Update workhandler.studprojecttaskstatus Set status= ? where studemail=? and projid=? and  TaskNo=? ;");
+			for (JCheckBox i : tlist) {
+				DatabaseConfig.ps.setInt(1,( i.isSelected()?1:0)); // for student setting Task status as unchecked
+				DatabaseConfig.ps.setString(2, studemail);
+				DatabaseConfig.ps.setInt(3, pid);
+				DatabaseConfig.ps.setInt(4, Arrays.asList(tlist).indexOf(i));
+				DatabaseConfig.ps.executeUpdate();
+			}
+			JOptionPane.showMessageDialog(null, "Project Status Saved");
+			DatabaseConfig.con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private String getUserName(String useremail) {
@@ -248,27 +314,39 @@ public class ProjectViewStudent extends JFrame {
 					DatabaseConfig.ps.executeUpdate();
 				}
 
-			} else {
-				DatabaseConfig.rs = DatabaseConfig.stmt.executeQuery(
-						"Select status,studemail,projid,TaskNo into workhandler.studprojecttaskstatus where studemail='"
-								+ useremail + "'; ");
-				for (Map.Entry i : tasklist.entrySet()) {
-					DatabaseConfig.ps.setInt(1, 0); // for student setting Task status as unchecked
-					DatabaseConfig.ps.setString(2, useremail);
-					DatabaseConfig.ps.setInt(3, pid);
-					DatabaseConfig.ps.setInt(4, (int) i.getKey());
-					DatabaseConfig.ps.executeUpdate();
-				}
-			}
-
-			if (status.equals(HardCodeData.projStatus[1])) {
+			} else if (status.equals(HardCodeData.projStatus[1])) // if project is assigned checking status of tasks
+			{
 				btnSave.setVisible(true);
 				btnSubmit.setVisible(true);
+
+				DatabaseConfig.rs = DatabaseConfig.stmt
+						.executeQuery("SELECT Status,TaskNo FROM workhandler.studprojecttaskstatus where StudEmail='"
+								+ useremail + "' and ProjId=" + pid + ";");
+
+				while (DatabaseConfig.rs.next()) {
+					// tasklist.put(DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2));
+					if (tasklist.containsKey(DatabaseConfig.rs.getInt(2))) {
+						tlist[DatabaseConfig.rs.getInt(1)]
+								.setSelected((DatabaseConfig.rs.getInt(1) > 0 ? false : true));
+					}
+				}
 			} else if (status.equals(HardCodeData.projStatus[2])) {
 				btnSave.setVisible(true);
 				btnSave.setEnabled(false);
 				btnSubmit.setVisible(true);
 				btnSubmit.setEnabled(false);
+				
+				DatabaseConfig.rs = DatabaseConfig.stmt
+						.executeQuery("SELECT Status,TaskNo FROM workhandler.studprojecttaskstatus where StudEmail='"
+								+ useremail + "' and ProjId=" + pid + ";");
+
+				while (DatabaseConfig.rs.next()) {
+					// tasklist.put(DatabaseConfig.rs.getInt(1), DatabaseConfig.rs.getString(2));
+					if (tasklist.containsKey(DatabaseConfig.rs.getInt(2))) {
+						tlist[DatabaseConfig.rs.getInt(1)]
+								.setSelected((DatabaseConfig.rs.getInt(1) > 0 ? false : true));
+					}
+				}
 			}
 
 			panelGridTaskList.repaint();
@@ -286,7 +364,7 @@ public class ProjectViewStudent extends JFrame {
 
 	public static void main(String[] args) {
 
-		new ProjectViewStudent(48, "Shubhankar@xyz.com", HardCodeData.projStatus[0]);
+		new ProjectViewStudent(1, "Shubhankar@xyz.com", HardCodeData.projStatus[0]);
 
 	}
 }
