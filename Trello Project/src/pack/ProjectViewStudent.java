@@ -31,6 +31,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.event.ActionEvent;
 
 public class ProjectViewStudent extends JFrame {
@@ -129,8 +131,6 @@ public class ProjectViewStudent extends JFrame {
 				else
 				{
 					updateDetails(studemail,projectid);
-					
-					
 				}
 			}
 		});
@@ -142,8 +142,6 @@ public class ProjectViewStudent extends JFrame {
 		btnstart = new JButton("Start Project");
 		btnstart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				dispose();
-
 				try {
 					DatabaseConfig.initialize();
 
@@ -156,8 +154,9 @@ public class ProjectViewStudent extends JFrame {
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
-				new ProjectViewStudent(1, studemail, HardCodeData.projStatus[1]);
-
+				dispose();
+				new Mainpg(studemail,HardCodeData.usertype[3]);
+				//new ProjectViewStudent(1, studemail, HardCodeData.projStatus[1]);
 			}
 		});
 		btnstart.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -212,7 +211,39 @@ public class ProjectViewStudent extends JFrame {
 
 		setSize(867, 609);
 		setVisible(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				dispose();
+				new Mainpg(studemail,HardCodeData.usertype[3]);
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {
+			}
+		});
 		setLocationRelativeTo(null);
 		setTitle(" Project Details for " + getUserName(studemail));
 
@@ -281,7 +312,7 @@ public class ProjectViewStudent extends JFrame {
 				status = DatabaseConfig.rs.getString(2);
 				// break;
 			}
-
+			System.out.println(status);
 			DatabaseConfig.rs = DatabaseConfig.stmt.executeQuery(
 					"SELECT TaskNo , Task_Info FROM workhandler.project_tasks where Project_ID=" + pid + ";");
 			HashMap<Integer, String> tasklist = new HashMap<>();
@@ -307,18 +338,18 @@ public class ProjectViewStudent extends JFrame {
 				DatabaseConfig.ps = DatabaseConfig.con.prepareStatement(
 						"Insert into workhandler.studprojecttaskstatus (status,studemail,projid,TaskNo) values(?,?,?,?);");
 				for (Map.Entry i : tasklist.entrySet()) {
-					DatabaseConfig.ps.setInt(1, 0); // for student setting Task status as unchecked
+					DatabaseConfig.ps.setInt(1, 0);            // for student setting Task status as unchecked
 					DatabaseConfig.ps.setString(2, useremail);
 					DatabaseConfig.ps.setInt(3, pid);
 					DatabaseConfig.ps.setInt(4, (int) i.getKey());
 					DatabaseConfig.ps.executeUpdate();
 				}
 
-			} else if (status.equals(HardCodeData.projStatus[1])) // if project is assigned checking status of tasks
+			} else if (status.equals(HardCodeData.projStatus[1]))   // if project is assigned checking status of tasks
 			{
 				btnSave.setVisible(true);
 				btnSubmit.setVisible(true);
-
+				System.out.println("Project Assigned Button Visibled");
 				DatabaseConfig.rs = DatabaseConfig.stmt
 						.executeQuery("SELECT Status,TaskNo FROM workhandler.studprojecttaskstatus where StudEmail='"
 								+ useremail + "' and ProjId=" + pid + ";");

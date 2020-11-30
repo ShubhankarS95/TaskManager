@@ -28,6 +28,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Paint;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -186,7 +188,39 @@ public class ProjectViewTeacher extends JFrame {
 
 		setSize(1107, 724);
 		setVisible(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				dispose();
+				new Mainpg(useremail,usertype);
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {
+			}
+		});
 
 		getStudName(projid);
 		addDetails(projid, section);
@@ -226,10 +260,7 @@ public class ProjectViewTeacher extends JFrame {
 			if (studCompleted.size() == 0) {
 				studCompleted.add("No Student Found");
 			}
-			/*
-			 * System.out.println(studStarted); System.out.println(studProgress);
-			 * System.out.println(studCompleted);
-			 */
+
 			cmbstudStart.setModel(new DefaultComboBoxModel<String>(studStarted.toArray(new String[0])));
 			cmstudinprogress.setModel(new DefaultComboBoxModel<String>(studProgress.toArray(new String[0])));
 			cmbstudComplete.setModel(new DefaultComboBoxModel<String>(studCompleted.toArray(new String[0])));
@@ -284,7 +315,7 @@ public class ProjectViewTeacher extends JFrame {
 		JFreeChart chart = ChartFactory.createLineChart("Project Analysis Report ", "Student Names", "Days", dataset,
 				PlotOrientation.VERTICAL, false, true, false);
 
-		chart.setBackgroundPaint(new Color(0, 200, 0));
+		chart.setBackgroundPaint(new Color(255, 255, 255));
 		CategoryPlot plot = chart.getCategoryPlot();
 		plot.setRangeGridlinesVisible(false);
 

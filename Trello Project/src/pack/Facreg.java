@@ -14,7 +14,6 @@ public class Facreg {
 	Facreg() {
 
 		JFrame F3 = new JFrame("Form");
-		//F3.getContentPane().setBackground(Color.white);
 		JPanel panel = new javax.swing.JPanel() {
 	         protected void paintComponent(Graphics g) {
 	        	 
@@ -31,31 +30,13 @@ public class Facreg {
 	         }
 	      };
 		F3.setContentPane(panel);
-		/*
-		ImageIcon Img4 = new ImageIcon(getClass().getResource("Fac.png"));
-		JLabel Image4 = new JLabel(Img4);
-		Image4.setBounds(1010, 20, 330, 650);
-		Image4.setVisible(true);
-		F3.getContentPane().add(Image4);
-
-		ImageIcon Img6 = new ImageIcon(getClass().getResource("Fac.png"));
-		JLabel Image6 = new JLabel(Img6);
-		Image6.setBounds(0, 20, 330, 650);
-		Image6.setVisible(true);
-		F3.getContentPane().add(Image6);
-		 */
+		
 		JLabel l3 = new JLabel("Faculty Registration");
 		l3.setFont(new Font("Serif", Font.BOLD, 40));
 		l3.setForeground(Color.BLACK);
 		l3.setBounds(500, 0, 750, 50);
 		F3.getContentPane().add(l3);
 
-//panel Start
-/*
-		JPanel panel3 = new JPanel(null);
-		panel3.setBounds(372, 60, 610, 500);
-		panel3.setBackground(new Color(255, 153, 51));
-*/
 		JLabel j1 = new JLabel("Firstname");
 		j1.setBounds(372, 61, 150, 70);
 		j1.setFont(new Font("Serif", Font.PLAIN, 20));
@@ -113,12 +94,7 @@ public class Facreg {
 					k.consume();
 			}
 		});
-		/*
-		 * JButton b5=new JButton("Back"); b5.setBounds(355, 400,150,40);
-		 * 
-		 * b5.addActionListener(new ActionListener() { public void
-		 * actionPerformed(ActionEvent e) { new Loginpg(); } });
-		 */
+		
 		F3.getContentPane().add(j1);
 		F3.getContentPane().add(t1);
 
@@ -139,13 +115,9 @@ public class Facreg {
 
 		F3.getContentPane().add(j7);
 		F3.getContentPane().add(t5);
-//panel3.add(b5);
-
-		//F3.getContentPane().add(panel3);
 
 		F3.getContentPane().setLayout(null);
 
-		// Password Field Start
 		JLabel labelps = new JLabel("Create Password");
 		labelps.setBounds(372, 515, 150, 70);
 		labelps.setFont(new Font("Serif", Font.PLAIN, 20));
@@ -163,7 +135,6 @@ public class Facreg {
 		JPasswordField pswd2 = new JPasswordField();
 		pswd2.setBounds(832, 539, 150, 30);
 		F3.getContentPane().add(pswd2);
-//Password Field Ends
 
 		JButton b4 = new JButton("Exit");
 		b4.setBounds(758, 630, 150, 40);
@@ -184,7 +155,7 @@ public class Facreg {
 					String designation = b2.getSelectedItem().toString();
 					String password = pswd1.getText();
 
-					/*
+					
 					int mailotp = new MailOTPConfirmation().getOTP(email);
 					int userenterotp = Integer
 							.parseInt(JOptionPane.showInputDialog(F3, "Enter the OTP sent on your mail"));
@@ -200,15 +171,16 @@ public class Facreg {
 							DatabaseConfig.stmt.executeUpdate("insert into faculty values('" + facultyid + "','"
 									+ firstname + "','" + lastname + "','" + email + "','" + contact + "','"
 									+ department + "','" + designation + "','" + password + "')");
-							JOptionPane.showMessageDialog(null, firstname + "  Registration Succesful");
-
+							
+							JOptionPane.showMessageDialog(F3, firstname + "  Registration Succesful");
+							
+							F3.dispose();
+							new Loginpg();
+							
 						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-					}
-					*/
-					
+					}										
 				} else {
 					JOptionPane.showMessageDialog(null, "Password Not Matched");
 				}
@@ -216,7 +188,6 @@ public class Facreg {
 		});
 		b4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// JOptionPane.showMessageDialog(b4,"OOPS");
 				F3.dispose();
 				new Loginpg();
 			}

@@ -20,9 +20,7 @@ public class Stureg {
 
 	public Stureg() {
 
-		// Frame Start
 		F2 = new JFrame("Form");
-		//F2.getContentPane().setBackground(Color.WHITE);
 		JPanel panel = new javax.swing.JPanel() {
 	         protected void paintComponent(Graphics g) {
 	        	 
@@ -45,28 +43,6 @@ public class Stureg {
 		l2.setForeground(Color.BLACK);
 		l2.setBounds(450, 0, 750, 50);
 		F2.getContentPane().add(l2);
-/*
-		ImageIcon Img7 = new ImageIcon(getClass().getResource("Stu.png"));
-		JLabel Image7 = new JLabel(Img7);
-		Image7.setBounds(960, 20, 400, 650);
-		Image7.setVisible(true);
-		F2.getContentPane().add(Image7);
-
-		ImageIcon Img8 = new ImageIcon(getClass().getResource("Stu.png"));
-		JLabel Image8 = new JLabel(Img8);
-		Image8.setBounds(10, 20, 400, 650);
-		Image8.setVisible(true);
-		F2.getContentPane().add(Image8); */
-//panelcon Start
-		//JPanel panelcon = new JPanel(null);
-		//panelcon.setBounds(372, 60, 610, 500);
-//panelcon End		
-//Pane1 Start  
-		//JPanel panel1 = new JPanel(null);
-		//panel1.setBorder(new TitledBorder(null, "Personal Details", TitledBorder.LEADING, TitledBorder.ABOVE_TOP,
-		//		new Font("SERIF", Font.BOLD, 24), Color.DARK_GRAY));
-		//panel1.setBackground(new Color(179, 230, 255));
-		//panel1.setBounds(0, 0, 610, 250);
 
 		JLabel labelfn = new JLabel("Firstname");
 		labelfn.setBounds(412, 61, 150, 70);
@@ -107,17 +83,10 @@ public class Stureg {
 		JCheckBox check1 = new JCheckBox("Male", setFont(new Font("Serif", Font.PLAIN, 20)));
 		check1.setBounds(502, 251, 150, 40);
 		check1.setOpaque(false);
-		//check1.setBackground(new Color(179, 230, 255));
 
 		JCheckBox check2 = new JCheckBox("Female", setFont(new Font("Serif", Font.PLAIN, 20)));
 		check2.setBounds(652, 251, 150, 40);
 		check2.setOpaque(false);
-		//check2.setBackground(new Color(179, 230, 255));
-
-		//ButtonGroup grp = new ButtonGroup();
-		
-		//grp.add(check1);
-		//grp.add(check2);
 
 		F2.getContentPane().add(labelfn);
 		F2.getContentPane().add(Text1);
@@ -134,9 +103,7 @@ public class Stureg {
 		F2.getContentPane().add(labelGender);
 		F2.getContentPane().add(check1);
 		F2.getContentPane().add(check2);
-//Panel1 end        
 
-//Panel2 Start
 		JPanel panel2 = new JPanel(null);
 		panel2.setBorder(new TitledBorder(null, "College Details", TitledBorder.LEADING, TitledBorder.ABOVE_TOP,
 				new Font("SERIF", Font.BOLD, 24), Color.DARK_GRAY));
@@ -192,9 +159,7 @@ public class Stureg {
 
 		F2.getContentPane().add(labelschool);
 		F2.getContentPane().add(l1);
-//Panel2 end
-
-//Password Field Start	    
+	    
 		JLabel labelps = new JLabel("Create Password");
 		labelps.setBounds(412, 523, 150, 70);
 		labelps.setFont(new Font("Serif", Font.PLAIN, 20));
@@ -206,9 +171,6 @@ public class Stureg {
 		labelpswd.setFont(new Font("Serif", Font.PLAIN, 20));
 		JPasswordField pswd2 = new JPasswordField();
 		pswd2.setBounds(872, 547, 150, 30);
-//Password Field Ends	    
-
-//Button Field Start
 
 		JButton B1 = new JButton("Register");
 		B1.setBounds(485, 644, 120, 40);
@@ -234,7 +196,7 @@ public class Stureg {
 					String year = t6.getText();
 					String school = l1.getSelectedItem().toString();
 					String password = pswd1.getText();
-					/*
+					
 					int mailotp = new MailOTPConfirmation().getOTP(email);
 					int userenterotp = Integer
 							.parseInt(JOptionPane.showInputDialog(F2, "Enter the OTP sent on your mail"));
@@ -253,12 +215,13 @@ public class Stureg {
 
 							DatabaseConfig.con.close();
 						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 
 						JOptionPane.showMessageDialog(F2, firstname + "  Registration Successfull");
-					}*/
+						F2.dispose();
+						new Loginpg();
+					}
 				} else {
 					JOptionPane.showMessageDialog(F2, "Password Not Matched");
 				}

@@ -88,12 +88,6 @@ public class NewProjectDetails {
 		l4.setFont(new Font("SERIF", Font.BOLD, 40));
 		F5.getContentPane().add(l4);
 
-//panel5 start
-		/*
-		 * JPanel panel5 = new JPanel(null); panel5.setName("Enter Project Details");
-		 * panel5.setBounds(394, 60, 577, 609); panel5.setBackground(new Color(255, 204,
-		 * 255));
-		 */
 		labelpn = new JLabel("Project Name");
 		labelpn.setBounds(668, 62, 150, 70);
 		labelpn.setFont(new Font("Serif", Font.PLAIN, 25));
@@ -150,9 +144,6 @@ public class NewProjectDetails {
 						break;
 					}
 				}
-
-				// System.out.println(projectName+" "+teamleader+" "+startDate+" "+
-				// endDate+" "+course+" "+ppass);
 
 				try {
 					DatabaseConfig.initialize();
@@ -260,12 +251,7 @@ public class NewProjectDetails {
 					row.add(txtfieldtasks[i]);
 					gridpanel.add(row);
 				}
-				/*
-				 * gridpanel.setBackground(new Color(255, 204, 255));
-				 * borderpanel.setBackground(new Color(255, 204, 255));
-				 * scrollPane.setBackground(new Color(255, 204, 255));
-				 */
-
+				
 				borderpanel.repaint();
 				gridpanel.repaint();
 				scrollPane.revalidate();
@@ -295,17 +281,6 @@ public class NewProjectDetails {
 
 		F5.getContentPane().add(datechStartD);
 		F5.getContentPane().add(dateChooserEndD);
-
-		// panel5.setVisible(true);
-		// panel5 end
-		// new panel
-		/*
-		 * JPanel panelt =new JPanel(null); panelt.setBounds(0,416,550,126);
-		 * panelt.setBackground(Color.blue); //panelt.setVisible(false);
-		 * panel5.add(panelt);
-		 */
-		// new panel ends
-		// F5.getContentPane().add(panel5);
 
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(639, 462, 479, 122);

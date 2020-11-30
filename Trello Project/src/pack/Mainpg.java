@@ -40,8 +40,7 @@ public class Mainpg {
 	private class TasksButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// JOptionPane.showMessageDialog(null," "+e.getActionCommand());
-			// System.out.println(e.getActionCommand().split("-",-1)[0]);
+			
 			if (usertype.equals(HardCodeData.usertype[1]) || usertype.equals(HardCodeData.usertype[2])) {
 				if (e.getActionCommand().equals("ADD PROJECT")) {
 					F7.dispose();
@@ -91,29 +90,17 @@ public class Mainpg {
 		});
 		F7.getContentPane().add(back1);
 
-		/*
-		 * ImageIcon Img9=new ImageIcon("Icon.png"); JLabel Image9=new JLabel(Img9);
-		 * Image9.setBounds(10,20, 350, 650); F7.getContentPane().add(Image9);
-		 * 
-		 * ImageIcon Img10=new ImageIcon("Icon.png"); JLabel Image10=new JLabel(Img10);
-		 * Image10.setBounds(975,20, 350, 650); F7.getContentPane().add(Image10);
-		 */
-
+		
 		l7 = new JLabel("TASK MANAGER");
 		l7.setHorizontalAlignment(SwingConstants.CENTER);
 		l7.setForeground(Color.black);
 		l7.setBounds(328, 0, 700, 50);
 		l7.setFont(new Font("SERIF", Font.BOLD, 40));
 		F7.getContentPane().add(l7);
-		/*
-		 * panel7 = new JPanel(null); panel7.setBounds(328, 73, 700, 400);
-		 * panel7.setBackground(new Color(153, 255, 153));
-		 * F7.getContentPane().add(panel7);
-		 */
+		
 		Todo = new JButton("List of Work");
 		Todo.setBounds(355, 140, 170, 30);
 		Todo.setBorder(null);
-		// Todo.setBackground(Color.YELLOW);
 		Todo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -315,8 +302,53 @@ public class Mainpg {
 		F7.getContentPane().setLayout(null);
 		F7.setSize(1365, 730);
 		F7.setVisible(true);
-		F7.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		F7.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		F7.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				F7.dispose();
+				new Loginpg();
+				
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		getProjectName(useremailname, usertype);
 		System.out.println("Dashboard Consturctor");
 	}
