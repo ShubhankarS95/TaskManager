@@ -20,7 +20,7 @@ class SenderAuthenticator extends Authenticator
 	public PasswordAuthentication getPasswordAuthentication()
 	{
 		PasswordAuthentication pa = new PasswordAuthentication(
-				"2019645938.shubhankar@pg.sharda.ac.in", "2019645938");
+				"************", "*******");
 		return pa;
 	}
 }
